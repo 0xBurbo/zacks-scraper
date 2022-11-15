@@ -1,0 +1,23 @@
+{
+    "username": "user123",
+    "password": "password123",
+    "maxRetries": 5,
+    "delayBetweenRetries": 5000,
+    "queries": [
+        {
+            "id": "zacks_rank",
+            "value": "1",
+            "operator": ">="
+        },
+        {
+            "id": "value_score",
+            "value": "A",
+            "operator": ">="
+        },
+        {
+            "id": "momentum_score",
+            "value": "A",
+            "operator": ">="
+        }
+    ]
+}
