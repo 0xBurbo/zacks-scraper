@@ -1,0 +1,16 @@
+username: <username/email>
+password: <password>
+maxRetries: 6
+jobs:
+    - jobType: stock_screener
+      outDir: "./output/stockScreener"
+      parameters:
+          - id: zacks_rank
+            value: "1"
+            operator: ">="
+          - id: value_score
+            value: "A"
+            operator: ">="
+          - id: momentum_score
+            value: "A"
+            operator: ">="
