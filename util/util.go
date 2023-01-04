@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"net/http/cookiejar"
-	"net/url"
 	"strings"
 
 	"golang.org/x/net/publicsuffix"
@@ -18,15 +17,15 @@ func GetTestClient() *http.Client {
 		log.Fatal(err)
 	}
 
-	proxyUrl, err := url.Parse("http://localhost:8888")
-	if err != nil {
-		log.Fatal(err)
-	}
+	// proxyUrl, err := url.Parse("http://localhost:8888")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	return &http.Client{
-		Jar: jar,
+		Jar:       jar,
 		Transport: &http.Transport{
-			Proxy: http.ProxyURL(proxyUrl),
+			// Proxy: http.ProxyURL(proxyUrl),
 		},
 	}
 }

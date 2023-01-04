@@ -1,4 +1,4 @@
-package stockscreener
+package espfilter
 
 import (
 	"testing"
@@ -8,7 +8,7 @@ import (
 	"github.com/iamburbo/zacks-scraper/zacks"
 )
 
-func TestRunScreen(t *testing.T) {
+func TestRunEspFilter(t *testing.T) {
 	cfg, err := config.LoadConfigFile("../config.yml")
 	if err != nil {
 		t.Fatal(err)
@@ -23,13 +23,13 @@ func TestRunScreen(t *testing.T) {
 
 	var job *config.ScrapeJob = nil
 	for _, j := range cfg.Jobs {
-		if j.JobType == "stock_screener" {
+		if j.JobType == "esp_filter" {
 			job = &j
 			break
 		}
 	}
 
-	err = RunStockScreener(job, client)
+	err = RunEspFilter(job, client)
 	if err != nil {
 		t.Fatal(err)
 	}

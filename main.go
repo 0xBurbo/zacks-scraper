@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/iamburbo/zacks-scraper/config"
+	"github.com/iamburbo/zacks-scraper/espfilter"
 	"github.com/iamburbo/zacks-scraper/stockscreener"
 	"github.com/iamburbo/zacks-scraper/zacks"
 	"golang.org/x/net/publicsuffix"
@@ -48,6 +49,8 @@ func main() {
 			switch job.JobType {
 			case "stock_screener":
 				err = stockscreener.RunStockScreener(&job, client)
+			case "esp_filter":
+				err = espfilter.RunEspFilter(&job, client)
 			}
 
 			if err != nil {

@@ -1,6 +1,7 @@
 username: <username/email>
 password: <password>
 maxRetries: 6
+delayBetweenRetries: 5000
 jobs:
     - jobType: stock_screener
       outDir: "./output/stockScreener"
@@ -14,3 +15,11 @@ jobs:
           - id: momentum_score
             value: "A"
             operator: ">="
+    - jobType: esp_filter
+      outDir: "./output/espFilter"
+      parameters:
+          - filter_type: "buys"
+          - esp_checkboxes: [1]
+          - zacks_rank_checkboxes: []
+          - surp_checkboxes: []
+          - reporting_date_checkboxes: []
