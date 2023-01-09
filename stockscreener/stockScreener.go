@@ -52,7 +52,7 @@ func RunStockScreener(job *config.ScrapeJob, client *http.Client) error {
 	}
 
 	// Write data to output directory
-	fileName := time.Now().Format("2006-01-02_15-04-05") + ".csv"
+	fileName := time.Now().Format("20060102150405") + ".csv"
 	f, err := os.Create(filepath.Join(job.OutDir, fileName))
 	if err != nil {
 		log.Fatalf("error creating output file: %v", err)
