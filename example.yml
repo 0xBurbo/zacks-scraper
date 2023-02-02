@@ -15,11 +15,42 @@ jobs:
           - id: momentum_score
             value: "A"
             operator: ">="
+
     - jobType: esp_filter
       outDir: "./output/espFilter"
       parameters:
-          - filter_type: "buys"
+          - filter_type: "buys" # "buys" or "sells"
           - esp_checkboxes: [1]
           - zacks_rank_checkboxes: []
           - surp_checkboxes: []
           - reporting_date_checkboxes: []
+
+    # Collect earnings release data from time of execution
+    - jobType: earnings_release
+      outDir: "./output/earningsRelease"
+      parameters:
+          - start_date: NOW 
+
+    # Collect earnings release data between a range of dates (inclusive)
+    - jobType: earnings_release
+      outDir: "./output/earningsRelease"
+      parameters:
+          - start_date: "2023-01-23"
+          - end_date: "2023-01-27"
+
+    # Collect earnings calendar data from time of execution
+    - jobType: earnings_calendar
+      outDir: "./output/earningsCalendar"
+      parameters:
+          - start_date: NOW
+
+    # Collect earnings calendar data between a range of dates,
+    # and only from certain tabs
+    - jobType: earnings_calendar
+      outDir: "./output/earningsCalendar"
+      parameters:
+          - start_date: "2023-01-23"
+          - end_date: "2023-02-01"
+          - tabs:
+            - "earnings"
+            - "sales"

@@ -7,6 +7,8 @@ import (
 	"time"
 
 	"github.com/iamburbo/zacks-scraper/config"
+	"github.com/iamburbo/zacks-scraper/earningscalendar"
+	"github.com/iamburbo/zacks-scraper/earningsrelease"
 	"github.com/iamburbo/zacks-scraper/espfilter"
 	"github.com/iamburbo/zacks-scraper/stockscreener"
 	"github.com/iamburbo/zacks-scraper/zacks"
@@ -51,6 +53,10 @@ func main() {
 				err = stockscreener.RunStockScreener(&job, client)
 			case "esp_filter":
 				err = espfilter.RunEspFilter(&job, client)
+			case "earnings_release":
+				err = earningsrelease.RunEarningsRelease(&job, client)
+			case "earnings_calendar":
+				err = earningscalendar.RunEarningsCalendar(&job, client)
 			}
 
 			if err != nil {
