@@ -63,7 +63,7 @@ func RunEarningsCalendar(job *config.ScrapeJob, client *http.Client) error {
 			}
 
 			// Create output file
-			fileName := temp.Format("20060102") + "_" + tab + ".parquet"
+			fileName := temp.Format("20060102150405") + "_" + tab + ".parquet"
 			w, err := os.Create(filepath.Join(job.OutDir, fileName))
 			if err != nil {
 				return fmt.Errorf("failed to create local file: %e", err)
