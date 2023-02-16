@@ -108,8 +108,8 @@ func parseJobParameters(parameters []map[string]interface{}) (*earningsCalendarP
 	for _, p := range parameters {
 		if t, ok := p["start_date"]; ok {
 			if t.(string) == "NOW" {
-				start_date = time.Now()
-				end_date = time.Now()
+				start_date = time.Now().Add(1 * time.Hour)
+				end_date = time.Now().Add(1 * time.Hour)
 			} else {
 				parsed, err := time.Parse("2006-01-02", t.(string))
 				if err != nil {
