@@ -52,7 +52,8 @@ func RunEarningsRelease(job *config.ScrapeJob, client *http.Client) error {
 		parsedRows := parseEarningReleaseBody(body, temp)
 
 		// Write to parquet
-		fileName := temp.Format("20060102150405") + ".parquet"
+		filenameTimestamp := temp.Add(-time.Hour * 1)
+		fileName := filenameTimestamp.Format("20060102150405") + ".parquet"
 		w, err := os.Create(filepath.Join(job.OutDir, fileName))
 		if err != nil {
 			return fmt.Errorf("failed to create local file: %e", err)
