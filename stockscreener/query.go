@@ -121,6 +121,26 @@ func WriteQuery(w *multipart.Writer, config []map[string]interface{}) error {
 			if err != nil {
 				return err
 			}
+		case "last_eps_report_date":
+			err := writeLastEpsReportDateQuery(w, value, operator)
+			if err != nil {
+				return err
+			}
+		case "next_eps_report_date":
+			err := writeNextEpsReportDateQuery(w, value, operator)
+			if err != nil {
+				return err
+			}
+		case "q0_consensus_est":
+			err := writeQ0ConsensusEst(w, value, operator)
+			if err != nil {
+				return err
+			}
+		case "last_reported_quarter":
+			err := writeLastReportedQtrQuery(w, value, operator)
+			if err != nil {
+				return err
+			}
 		}
 
 	}
@@ -136,7 +156,7 @@ var operatorCodesForScores = map[string]int{
 	"<>": 20,
 }
 
-// Used by: Zacks rank, zacks industry rank
+// Used by: Zacks rank, zacks industry rank, last EPS report date
 var zackRankOperatorMap = map[string]int{
 	">=": 6,
 	"<=": 7,
@@ -418,5 +438,61 @@ func writeAvgVolumeQuery(writer *multipart.Writer, value, operator string) error
 	writer.WriteField("p_items[]", "12015") // TODO: Retrieve this value from zacks
 	writer.WriteField("p_item_name[]", "Avg Volume")
 	writer.WriteField("p_item_key[]", "15")
+	return nil
+}
+
+func writeLastEpsReportDateQuery(writer *multipart.Writer, value, operator string) error {
+	operatorCode, ok := zackRankOperatorMap[operator]
+	if !ok {
+		return errors.New("Unknown operator for last EPS report date query: " + operator)
+	}
+
+	writer.WriteField("operator[]", fmt.Sprintf("%v", operatorCode))
+	writer.WriteField("value[]", value)
+	writer.WriteField("p_items[]", "17050") // TODO: Retrieve this value from zacks
+	writer.WriteField("p_item_name[]", "Last EPS Report Date (yyyymmdd)")
+	writer.WriteField("p_item_key[]", "72")
+	return nil
+}
+
+func writeNextEpsReportDateQuery(writer *multipart.Writer, value, operator string) error {
+	operatorCode, ok := zackRankOperatorMap[operator]
+	if !ok {
+		return errors.New("Unknown operator for next EPS report date query: " + operator)
+	}
+
+	writer.WriteField("operator[]", fmt.Sprintf("%v", operatorCode))
+	writer.WriteField("value[]", value)
+	writer.WriteField("p_items[]", "17055") // TODO: Retrieve this value from zacks
+	writer.WriteField("p_item_name[]", "Next EPS Report Date (yyyymmdd)")
+	writer.WriteField("p_item_key[]", "73")
+	return nil
+}
+
+func writeQ0ConsensusEst(writer *multipart.Writer, value, operator string) error {
+	operatorCode, ok := zackRankOperatorMap[operator]
+	if !ok {
+		return errors.New("Unknown operator for Q0 consensus estimate query: " + operator)
+	}
+
+	writer.WriteField("operator[]", fmt.Sprintf("%v", operatorCode))
+	writer.WriteField("value[]", value)
+	writer.WriteField("p_items[]", "19005") // TODO: Retrieve this value from zacks
+	writer.WriteField("p_item_name[]", "Q0 Consensus Est. (last completed fiscal Qtr)")
+	writer.WriteField("p_item_key[]", "80")
+	return nil
+}
+
+func writeLastReportedQtrQuery(writer *multipart.Writer, value, operator string) error {
+	operatorCode, ok := zackRankOperatorMap[operator]
+	if !ok {
+		return errors.New("Unknown operator for last reported quarter query: " + operator)
+	}
+
+	writer.WriteField("operator[]", fmt.Sprintf("%v", operatorCode))
+	writer.WriteField("value[]", value)
+	writer.WriteField("p_items[]", "17030") // TODO: Retrieve this value from zacks
+	writer.WriteField("p_item_name[]", "Last Reported Qtr (yyyymm)")
+	writer.WriteField("p_item_key[]", "68")
 	return nil
 }
