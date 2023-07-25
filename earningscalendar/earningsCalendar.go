@@ -46,6 +46,10 @@ func RunEarningsCalendar(job *config.ScrapeJob, client *http.Client) error {
 		return err
 	}
 
+	currentDate := time.Now()
+	job.OutDir = filepath.Join(job.OutDir, currentDate.Format("200601021504"))
+	os.MkdirAll(job.OutDir, 0755)
+
 	// Collect and write data
 	temp := params.start_date
 	for params.end_date.Sub(temp) >= 0 {
@@ -72,22 +76,40 @@ func RunEarningsCalendar(job *config.ScrapeJob, client *http.Client) error {
 			switch tab {
 			case "earnings":
 				rows := parseEarningsData(data)
-				writeEarningsData(w, rows)
+				err = writeEarningsData(w, rows)
+				if err != nil {
+					log.Printf("error writing earnings data: %e", err)
+				}
 			case "sales":
 				rows := parseSalesData(data)
-				writeSalesData(w, rows)
+				err = writeSalesData(w, rows)
+				if err != nil {
+					log.Printf("error writing earnings data: %e", err)
+				}
 			case "guidance":
 				rows := parseGuidanceData(data)
-				writeGuidanceData(w, rows)
+				err = writeGuidanceData(w, rows)
+				if err != nil {
+					log.Printf("error writing earnings data: %e", err)
+				}
 			case "revisions":
 				rows := parseRevisionsData(data)
-				writeRevisionsData(w, rows)
+				err = writeRevisionsData(w, rows)
+				if err != nil {
+					log.Printf("error writing earnings data: %e", err)
+				}
 			case "dividends":
 				rows := parseDividendsData(data)
-				writeDividendsData(w, rows)
+				err = writeDividendsData(w, rows)
+				if err != nil {
+					log.Printf("error writing earnings data: %e", err)
+				}
 			case "splits":
 				rows := parseSplitsData(data)
-				writeSplitsData(w, rows)
+				err = writeSplitsData(w, rows)
+				if err != nil {
+					log.Printf("error writing earnings data: %e", err)
+				}
 			}
 
 			w.Close()
@@ -106,6 +128,24 @@ func parseJobParameters(parameters []map[string]interface{}) (*earningsCalendarP
 	var tabs []string
 
 	for _, p := range parameters {
+		if t, ok := p["start_date_offset"]; ok {
+			offset, err := strconv.Atoi(t.(string))
+			if err != nil {
+				return nil, err
+			}
+
+			start_date = time.Now().AddDate(0, 0, offset)
+		}
+
+		if t, ok := p["end_date_offset"]; ok {
+			offset, err := strconv.Atoi(t.(string))
+			if err != nil {
+				return nil, err
+			}
+
+			end_date = time.Now().AddDate(0, 0, offset)
+		}
+
 		if t, ok := p["start_date"]; ok {
 			if t.(string) == "NOW" {
 				start_date = time.Now().Add(1 * time.Hour)
